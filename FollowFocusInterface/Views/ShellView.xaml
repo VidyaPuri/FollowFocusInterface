@@ -4,9 +4,94 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FollowFocusInterface.Views"
+        xmlns:converters="clr-namespace:FollowFocusInterface.Converters"
         mc:Ignorable="d"
+        WindowState="{Binding WindowState}"
+        WindowStyle="None"
         Title="ShellView" Height="450" Width="800">
+    
+    
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="30"/>
+    </WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+    </Window.Resources>
     <Grid>
-        <TextBlock Text="Wow" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="5"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="5"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="5"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="5"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <!-- Window Control-->
+        <Grid Grid.Row="0" Grid.ColumnSpan="5" Background="#466874">
+            <Label Content="Robot TCP Client" Margin="5 0" FontWeight="Bold" FontSize="13" Foreground="Gainsboro"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
+                <Button x:Name="MinimizeWindow" Height="30" Width="30" Style="{DynamicResource WindowControllButtons}">
+                    <Image Source="Styles/Icons/Minimize.png" Width="15"/>
+                </Button>
+
+                <ToggleButton x:Name="MaximizeWindow" Height="30" Width="30" Template="{DynamicResource UnMaksimize_Maximize_Button}">
+                    <ToggleButton.Resources>
+                        <DataTemplate x:Key="Unpressed">
+                            <Image Source="Styles/Icons/Maksimize.png" Width="15"/>
+                        </DataTemplate>
+                        <DataTemplate x:Key="Pressed">
+                            <Image Source="Styles/Icons/UnMaksimize.png" Width="15"/>
+                        </DataTemplate>
+                    </ToggleButton.Resources>
+                    <ToggleButton.Style>
+                        <Style TargetType="{x:Type ToggleButton}">
+                            <Setter Property="ContentTemplate" Value="{StaticResource Unpressed}"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource Pressed}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
+
+                <Button x:Name="CloseWindow" Height="30" Width="30" Style="{DynamicResource WindowControllButtons}">
+                    <Image Source="Styles/Icons/Close.png" Width="15"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Networking View-->
+        <Grid Grid.Row="2" Grid.Column="1">
+            <ContentControl x:Name="NetworkingViewModel" />
+        </Grid>
+
+        <!--  Timeline controls -->
+        <Grid Grid.Row="2" Grid.Column="3">
+            <ContentControl x:Name="TimelineViewModel" />
+        </Grid>
+
+        <!-- Status bar -->
+        <Grid Grid.Row="5" Grid.ColumnSpan="5" Background="#466874" >
+            <DockPanel>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" >
+                    <Label Content="Socket status: " Foreground="Gainsboro" FontSize="10" ></Label>
+                    <Label Content="{Binding ConnectionStatusStr}" Foreground="Gainsboro" FontSize="10"></Label>
+                    <Label Content="Controller status: " Foreground="Gainsboro" FontSize="10"></Label>
+                    <Label Content="{Binding ControllerConnectionStatusBool}" Foreground="Gainsboro" FontSize="10"></Label>
+                    <Label Content="Controller move type: " Foreground="Gainsboro" FontSize="10"></Label>
+                    <Label Content="{Binding ControllerMoveToggle}" Foreground="Gainsboro" FontSize="10"></Label>
+                </StackPanel>
+            </DockPanel>
+        </Grid>
     </Grid>
 </Window>
