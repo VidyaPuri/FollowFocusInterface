@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         WindowState="{Binding WindowState}"
         WindowStyle="None"
-        Title="ShellView" Height="450" Width="800">
+        Title="ShellView" Height="1080" Width="1240">
     
     
     <WindowChrome.WindowChrome>
@@ -37,7 +37,7 @@
 
         <!-- Window Control-->
         <Grid Grid.Row="0" Grid.ColumnSpan="5" Background="#466874">
-            <Label Content="Robot TCP Client" Margin="5 0" FontWeight="Bold" FontSize="13" Foreground="Gainsboro"/>
+            <Label Content="Follow Focus Interface" Margin="5 0" FontWeight="Bold" FontSize="13" Foreground="Gainsboro"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
                 <Button x:Name="MinimizeWindow" Height="30" Width="30" Style="{DynamicResource WindowControllButtons}">
                     <Image Source="Styles/Icons/Minimize.png" Width="15"/>
@@ -86,10 +86,6 @@
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" >
                     <Label Content="Socket status: " Foreground="Gainsboro" FontSize="10" ></Label>
                     <Label Content="{Binding ConnectionStatusStr}" Foreground="Gainsboro" FontSize="10"></Label>
-                    <Label Content="Controller status: " Foreground="Gainsboro" FontSize="10"></Label>
-                    <Label Content="{Binding ControllerConnectionStatusBool}" Foreground="Gainsboro" FontSize="10"></Label>
-                    <Label Content="Controller move type: " Foreground="Gainsboro" FontSize="10"></Label>
-                    <Label Content="{Binding ControllerMoveToggle}" Foreground="Gainsboro" FontSize="10"></Label>
                 </StackPanel>
             </DockPanel>
         </Grid>
