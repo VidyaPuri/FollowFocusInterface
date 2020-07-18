@@ -75,6 +75,7 @@ namespace FollowFocusInterface.ViewModels
 
         private bool _USBSerialStatus;
         private string _USBConnectBtnText = "Open Port";
+        private string _SerialInput;
 
         #endregion
 
@@ -96,6 +97,15 @@ namespace FollowFocusInterface.ViewModels
         {
             get { return _USBConnectBtnText; }
             set => Set(ref _USBConnectBtnText, value);
+        }
+
+        /// <summary>
+        /// Serial Input Property
+        /// </summary>
+        public string SerialInput
+        {
+            get { return _SerialInput; }
+            set => Set(ref _SerialInput, value);
         }
 
         #endregion
@@ -128,22 +138,14 @@ namespace FollowFocusInterface.ViewModels
             }
         }
 
-        private string _SerialInput;
-
-        public string SerialInput
-        {
-            get { return _SerialInput; }
-            set => Set(ref _SerialInput, value);
-        }
-
-
+        /// <summary>
+        /// Send serial method
+        /// </summary>
         public void SendSerial()
         {
             var value = Convert.ToDouble(SerialInput);
             _serial.SendToPort(value);
-
         }
-
 
         #endregion
 
