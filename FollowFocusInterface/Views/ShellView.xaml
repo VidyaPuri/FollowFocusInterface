@@ -8,7 +8,9 @@
         mc:Ignorable="d"
         WindowState="{Binding WindowState}"
         WindowStyle="None"
-        Title="ShellView" Height="1080" Width="1240">
+        Title="ShellView" Height="1080" Width="1240" 
+        MinHeight="200" MinWidth="200" MaxHeight="1080" MaxWidth="1240"
+        BorderBrush="Black" BorderThickness="4">
     
     
     <WindowChrome.WindowChrome>
