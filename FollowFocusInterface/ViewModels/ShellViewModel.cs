@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace FollowFocusInterface.ViewModels
 {
-    public class ShellViewModel : Screen, IHandle<SerialStatusModel>
+    public class ShellViewModel : Screen, IHandle<SerialStatusModel>, IHandle<SerialReceivedModel>
     {
 
         #region Window Control
@@ -73,8 +73,12 @@ namespace FollowFocusInterface.ViewModels
 
         #region Private Members
 
+        private int _SliderValue;
+        private string _SerialInput;
         private bool _USBSerialStatus;
         private string _USBConnectBtnText = "Open Port";
+        private BindableCollection<SerialReceivedModel> _ReceivedMessageLog = new BindableCollection<SerialReceivedModel>();
+
 
         #endregion
 
@@ -98,6 +102,38 @@ namespace FollowFocusInterface.ViewModels
             set => Set(ref _USBConnectBtnText, value);
         }
 
+        /// <summary>
+        /// SerialInput property
+        /// </summary>
+        public string SerialInput
+        {
+            get { return _SerialInput; }
+            set => Set(ref _SerialInput, value);
+        }
+
+        /// <summary>
+        /// Recieved Message Log
+        /// </summary>
+        public BindableCollection<SerialReceivedModel> ReceivedMessageLog
+        {
+            get { return _ReceivedMessageLog; }
+            set => Set(ref _ReceivedMessageLog, value);
+        }
+
+        /// <summary>
+        /// Slider Value Property
+        /// </summary>
+        public int SliderValue
+        {
+            get { return _SliderValue; }
+            set
+            {
+                _SliderValue = value;
+                _serial.SendToPort(value);
+                NotifyOfPropertyChange(() => SliderValue);
+            }
+        }
+
         #endregion
 
         /// <summary>
@@ -113,12 +149,10 @@ namespace FollowFocusInterface.ViewModels
                     if (!USBSerialStatus)
                     {
                         _serial.OpenSerialPort();
-                        //BTSerialStatus = true;
                     }
                     else if (USBSerialStatus)
                     {
                         _serial.CloseSerialPort();
-                        //BTSerialStatus = false;
                     }
                 });
             }
@@ -128,20 +162,13 @@ namespace FollowFocusInterface.ViewModels
             }
         }
 
-        private string _SerialInput;
-
-        public string SerialInput
-        {
-            get { return _SerialInput; }
-            set => Set(ref _SerialInput, value);
-        }
-
-
+        /// <summary>
+        /// Send to Arduino method
+        /// </summary>
         public void SendSerial()
         {
             var value = Convert.ToDouble(SerialInput);
             _serial.SendToPort(value);
-
         }
 
 
@@ -162,6 +189,17 @@ namespace FollowFocusInterface.ViewModels
                 USBConnectBtnText = "Close Port";
             else if (!USBSerialStatus)
                 USBConnectBtnText = "Open Port";
+        }
+
+
+        /// <summary>
+        /// Received from serial package
+        /// </summary>
+        /// <param name="message"></param>
+        public void Handle(SerialReceivedModel message)
+        {
+            //ReceivedMessageLog.Add(message);
+            ReceivedMessageLog.Insert(0, message);
         }
 
         #endregion

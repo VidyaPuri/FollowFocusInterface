@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FollowFocusInterface.Views"
         xmlns:converters="clr-namespace:FollowFocusInterface.Converters"
+        xmlns:helpers="clr-namespace:FollowFocusInterface.Helpers"
         mc:Ignorable="d"
         WindowState="{Binding WindowState}"
         WindowStyle="None"
@@ -116,7 +117,8 @@
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
-                                <Slider x:Name="Slider" Value="{Binding SliderValue}" Width="370" Minimum="520" Maximum="2380" IsSnapToTickEnabled="True" TickFrequency="5" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                                <Slider x:Name="Slider" Value="{Binding SliderValue}" Minimum="0" Maximum="270"
+                                        Width="370" IsSnapToTickEnabled="True" TickFrequency="5" Margin="10 0 0 0" VerticalAlignment="Center"/>
                                 <Label Content="Value:" VerticalAlignment="Center"></Label>
                                 <TextBlock Text="{Binding SliderValue, StringFormat={}{0:0.#}}" Margin="10 0" Width="50" VerticalAlignment="Center"></TextBlock>
                             </StackPanel>
@@ -145,7 +147,30 @@
                                     </ListView.ItemTemplate>
                                 </ListView>
                             </StackPanel>
+
+                            <!-- Column 1-->
+                            <StackPanel >
+                                <TextBlock Text="Received from Arduino" Margin="0 5" />
+                                <ScrollViewer helpers:AutoScrollBehavior.AutoScroll="True" HorizontalScrollBarVisibility="Auto">
+                                    <ItemsControl ItemsSource="{Binding ReceivedMessageLog}"  Style="{DynamicResource LogViewerStyle}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="#" FontWeight="DemiBold"></TextBlock>
+                                                    <TextBlock Text="{Binding Idx}" FontWeight="DemiBold"></TextBlock>
+                                                    <TextBlock Text=" "></TextBlock>
+                                                    <TextBlock Text="{Binding Timestamp}" FontWeight="DemiBold" FontStyle="Italic"></TextBlock>
+                                                    <TextBlock Text=": " FontWeight="DemiBold"></TextBlock>
+                                                    <TextBlock Text="{Binding Message}"></TextBlock>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </StackPanel>
                         </StackPanel>
+                        
+                        
                     </Grid>
                 </GroupBox>
             </Grid>

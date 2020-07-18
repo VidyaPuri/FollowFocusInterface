@@ -72,6 +72,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Helpers\AutoScrollBehavior.cs" />
     <Compile Include="Models\SerialReceivedModel.cs" />
     <Compile Include="Models\SerialStatusModel.cs" />
     <Compile Include="Networking\SerialCommunication.cs" />
