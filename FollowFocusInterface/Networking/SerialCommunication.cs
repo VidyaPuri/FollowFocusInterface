@@ -76,13 +76,10 @@ namespace FollowFocusInterface.Networking
             {
                 idx++;
                 SerialPort spl = (SerialPort)sender;
-                //string received = spl.ReadLine();
                 serialReceived.Message = spl.ReadLine();
                 serialReceived.Timestamp = DateTime.Now.ToString("HH:mm:ss");
                 serialReceived.Idx = idx;
 
-                Debug.WriteLine($"Data {spl.ReadLine()} \n");
-                //Debug.WriteLine($"Received {serialReceived.Message}");
                 _eventAggregator.BeginPublishOnUIThread(serialReceived);
             }
             catch (Exception ex)
