@@ -19,6 +19,7 @@ namespace FollowFocusInterface
         {
             simpleContainer.Instance(simpleContainer);
             simpleContainer.Singleton<ShellViewModel>();
+            simpleContainer.Singleton<MainViewTestTabsViewModel>();
 
             simpleContainer
                 .Singleton<IWindowManager, WindowManager>()
@@ -27,7 +28,8 @@ namespace FollowFocusInterface
 
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
-            DisplayRootViewFor<ShellViewModel>();
+            DisplayRootViewFor<ShellViewModel>(); 
+            DisplayRootViewFor<MainViewTestTabsViewModel>();
         }
 
         protected override object GetInstance(Type service, string key)

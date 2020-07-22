@@ -190,6 +190,9 @@
                                 <RowDefinition Height="*"></RowDefinition>
                                 <RowDefinition Height="2"></RowDefinition>
                             </Grid.RowDefinitions>
+                            <Grid  Grid.Row="1" Grid.Column="1">
+                            <ContentControl x:Name="MainViewTestTabsView"/>
+                            </Grid>
                         </Grid>
                     </TabItem.Content>
                 </TabItem>
