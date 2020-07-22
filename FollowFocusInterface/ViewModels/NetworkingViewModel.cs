@@ -18,6 +18,7 @@ namespace FollowFocusInterface.ViewModels
         // EventAggregator
         private IEventAggregator _eventAggregator { get; }
         private SerialCommunication _serial;
+        private LogModel logMessage = new LogModel();
 
         #endregion
 
@@ -101,7 +102,6 @@ namespace FollowFocusInterface.ViewModels
                 _roboServer.CloseServer();
                 NoClientsConnected = 0;
             }
-
         }
 
         #endregion
@@ -213,6 +213,8 @@ namespace FollowFocusInterface.ViewModels
 
         private int _ReceivedFocusTarget;
         private int _SelectedFocusTargetIdx = 0;
+        private int TargetIdx = 0;
+
 
         #endregion
 
@@ -245,10 +247,12 @@ namespace FollowFocusInterface.ViewModels
             set
             {
                 _ReceivedFocusTarget = value;
-                Debug.WriteLine($"I have received the order to execute servo focus position #{ReceivedFocusTarget}");
+                //Debug.WriteLine($"I have received the order to execute servo focus position #{ReceivedFocusTarget}");
                 try
                 {
                     _serial.SendToPort(FocusList[value].Val);
+                    logMessage.Message = $"Move to position #{ReceivedFocusTarget} at {FocusList[value].Val}";
+                    _eventAggregator.PublishOnUIThread(logMessage);
                 }
                 catch (Exception ex)
                 {
@@ -269,11 +273,13 @@ namespace FollowFocusInterface.ViewModels
         {
             var target = new FocusModel
             {
-                Name = "GetSomeName",
-                Idx = 0,
+                Name = $"FollowFocus Target #{TargetIdx}",
+                Idx = TargetIdx,
                 Val = SliderValue
             };
             FocusList.Add(target);
+
+            TargetIdx++;
         }
 
         /// <summary>
@@ -283,11 +289,13 @@ namespace FollowFocusInterface.ViewModels
         {
             var target = new FocusModel
             {
-                Name = "FocusTarget",
-                Idx = 0,
+                Name = $"FocusTarget {TargetIdx}",
+                Idx = TargetIdx,
                 Val = SliderValue
             };
             FocusList.Insert(SelectedFocusTargetIdx, target);
+
+            TargetIdx++;
         }
 
         /// <summary>

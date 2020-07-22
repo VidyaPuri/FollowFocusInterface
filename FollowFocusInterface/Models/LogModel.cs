@@ -1,7 +1,7 @@
 ﻿
 namespace FollowFocusInterface.Models
 {
-    public class SerialReceivedModel
+    public class LogModel
     {
         public int Idx { get; set; }
         public string Message { get; set; }

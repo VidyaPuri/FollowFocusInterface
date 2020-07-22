@@ -11,14 +11,12 @@ namespace FollowFocusInterface.Networking
 
         private SerialPort port;
         private readonly SerialStatusModel serialStatus = new SerialStatusModel();
-        private SerialReceivedModel serialReceived = new SerialReceivedModel();
-        private int idx;
+        private LogModel serialReceived = new LogModel();
         public IEventAggregator _eventAggregator { get; }
 
         public SerialCommunication(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            idx = 0;
         }
 
         /// <summary>
@@ -74,11 +72,8 @@ namespace FollowFocusInterface.Networking
         {
             try
             {
-                idx++;
                 SerialPort spl = (SerialPort)sender;
                 serialReceived.Message = spl.ReadLine();
-                serialReceived.Timestamp = DateTime.Now.ToString("HH:mm:ss");
-                serialReceived.Idx = idx;
 
                 _eventAggregator.BeginPublishOnUIThread(serialReceived);
             }

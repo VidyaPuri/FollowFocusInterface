@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 
 namespace FollowFocusInterface.ViewModels
 {
-    public class LoggerViewModel : Screen, IHandle<SerialReceivedModel>
+    public class LoggerViewModel : Screen, IHandle<LogModel>
     {
         #region Private Members
 
         // EventAggregator
         private IEventAggregator _eventAggregator { get; }
+        private int Idx = 0;
 
         #endregion
 
@@ -33,7 +34,8 @@ namespace FollowFocusInterface.ViewModels
 
         #region Private Members
 
-        private BindableCollection<SerialReceivedModel> _ReceivedMessageLog = new BindableCollection<SerialReceivedModel>();
+        private BindableCollection<LogModel> _ReceivedMessageLog = new BindableCollection<LogModel>();
+        private LogModel LogPackage = new LogModel();
 
         #endregion
 
@@ -42,10 +44,19 @@ namespace FollowFocusInterface.ViewModels
         /// <summary>
         /// Recieved Message Log
         /// </summary>
-        public BindableCollection<SerialReceivedModel> ReceivedMessageLog
+        public BindableCollection<LogModel> ReceivedMessageLog
         {
             get { return _ReceivedMessageLog; }
             set => Set(ref _ReceivedMessageLog, value);
+        }
+
+        /// <summary>
+        /// Log Package Initialisation
+        /// </summary>
+        public LogModel _LogPackage
+        {
+            get { return LogPackage; }
+            set => Set(ref LogPackage, value);
         }
 
         #endregion
@@ -58,10 +69,14 @@ namespace FollowFocusInterface.ViewModels
         /// Received from serial package
         /// </summary>
         /// <param name="message"></param>
-        public void Handle(SerialReceivedModel message)
+        public void Handle(LogModel message)
         {
-            //ReceivedMessageLog.Add(message);
-            ReceivedMessageLog.Insert(0, message);
+            LogPackage.Message = message.Message;
+            LogPackage.Idx = Idx;
+            LogPackage.Timestamp = DateTime.Now.ToString("HH:mm:ss");
+
+            ReceivedMessageLog.Insert(0, LogPackage);
+            Idx++;
         }
 
         #endregion

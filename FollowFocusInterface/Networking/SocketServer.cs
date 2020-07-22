@@ -18,6 +18,8 @@ namespace RobotClient.Networking
 
         private Dictionary<int, StateObjectModel> clients = new Dictionary<int, StateObjectModel>();
         private SocketServerModel socketServerModel = new SocketServerModel();
+        private LogModel logMessage = new LogModel();
+
         private Socket listener;
         private bool isListening;
 
@@ -57,6 +59,8 @@ namespace RobotClient.Networking
 
                     // Update the UI thread
                     socketServerModel.IsServerListening = isListening;
+                    logMessage.Message = $"Server is started and is listening for connections!";
+                    _eventAggregator.PublishOnUIThread(logMessage);
                     UpdateUI();
 
                     while (isListening)
@@ -98,7 +102,10 @@ namespace RobotClient.Networking
                 {
                     state.Id = !clients.Any() ? 1 : clients.Keys.Max() + 1;
                     clients.Add(state.Id, state);
-                    Debug.WriteLine("Client connected. Get Id " + state.Id);
+
+                    logMessage.Message = $"Client with Id {state.Id} connected!";
+                    _eventAggregator.PublishOnUIThread(logMessage);
+
                     socketServerModel.NoClientsConnected = clients.Count();
                     UpdateUI();
                 }
@@ -269,6 +276,9 @@ namespace RobotClient.Networking
             }
         }
 
+        /// <summary>
+        /// Updates the UI
+        /// </summary>
         private void UpdateUI()
         {
             _eventAggregator.PublishOnUIThread(socketServerModel);
