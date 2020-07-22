@@ -73,111 +73,12 @@
 
         <!-- Networking View-->
         <Grid Grid.Row="2" Grid.Column="1">
-            <!-- USB Serial Port -->
-            <Border Grid.Row="2" Grid.Column="1" BorderBrush="Black" BorderThickness="1" />
-            <Grid Grid.Row="2" Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="5"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="5"/>
-                </Grid.RowDefinitions>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="5"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- USB Serial Communication -->
-                <ToggleButton Grid.Column="1" Grid.Row="1" Height="20" Width="155" VerticalAlignment="top" HorizontalAlignment="Left" IsChecked="True"
-                          x:Name="ToggleVisibility_02" Panel.ZIndex="1" Style="{DynamicResource VisibilityToggleButton}"/>
-                <GroupBox Grid.Column="1" Grid.Row="1" Header="USB Serial Communication" BorderThickness="1" BorderBrush="DimGray">
-                    <Grid Grid.Row="1" Visibility="{Binding ElementName=ToggleVisibility_02, Path=IsChecked, Converter={StaticResource BoolToVisibility}}">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"></RowDefinition>
-                        </Grid.RowDefinitions>
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="10 5">
-                                <Button x:Name="USBSerialConnect" Content="{Binding USBConnectBtnText, FallbackValue='Open Port'}"
-                                    Width="100" Style="{DynamicResource ButtonStyle1}"/>
-                                <RadioButton Content="Status" HorizontalAlignment="Center"  IsChecked="{Binding USBSerialStatus}" IsEnabled="False"
-                                         FlowDirection="RightToLeft" Margin="15 0 0 0" Style="{DynamicResource RadioButtonStyle1}" 
-                                         VerticalAlignment="Center">
-                                </RadioButton>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Margin="10 5">
-                                <TextBox x:Name="SerialInput" Width="414" Height="auto"  VerticalContentAlignment="Center" Margin="0 0 10 0"/>
-                                <Button x:Name="SendSerial" Content="Send" Width="45" Style="{DynamicResource ButtonStyle1}"/>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal">
-                                <Slider x:Name="Slider" Value="{Binding SliderValue}" Minimum="0" Maximum="270"
-                                        Width="370" IsSnapToTickEnabled="True" TickFrequency="5" Margin="10 0 0 0" VerticalAlignment="Center"/>
-                                <Label Content="Value:" VerticalAlignment="Center"></Label>
-                                <TextBlock Text="{Binding SliderValue, StringFormat={}{0:0.#}}" Margin="10 0" Width="50" VerticalAlignment="Center"></TextBlock>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="10">
-                                <StackPanel >
-                                    <Button Content="Add" x:Name="AddFocusTarget"  Style="{DynamicResource ButtonStyle1}" Width="100"/>
-                                    <Button Content="Insert" x:Name="InsertFocusTarget" Style="{DynamicResource ButtonStyle1}" Width="100"/>
-                                    <Button Content="Edit" x:Name="EditFocusTarget"  Style="{DynamicResource ButtonStyle1}" Width="100"/>
-                                    <Button Content="Remove" x:Name="RemoveFocusTarget"  Style="{DynamicResource ButtonStyle1}" Width="100"/>
-                                </StackPanel>
-                                <ListView  ItemsSource="{Binding FocusList}" SelectionMode="Single"
-                                       MinHeight="50" MaxHeight="100" MinWidth="365"
-                                       SelectedIndex="{Binding SelectedFocusTargetIdx}"
-                                       SelectedItem="{Binding SelectedFocusTarget}" BorderBrush="#141414" BorderThickness="1">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="   " Height="20"/>
-                                                <TextBox Text="{Binding Name}" Foreground="#FFB4B4B4" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Height="18" Width="248"/>
-                                                <TextBlock Text="   " Height="20"/>
-                                                <TextBlock Text="{Binding Val, StringFormat={}{0:0.#}}" Foreground="#FFB4B4B4" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Height="18" Width="30"/>
-                                                <TextBlock Text="   " Height="20"/>
-                                                <TextBox Text="{Binding Idx}" Foreground="#FFB4B4B4" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Height="18"/>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </StackPanel>
-
-                            <!-- Column 1-->
-                            <StackPanel >
-                                <TextBlock Text="Received from Arduino" Margin="0 5" />
-                                <ScrollViewer helpers:AutoScrollBehavior.AutoScroll="True" HorizontalScrollBarVisibility="Auto">
-                                    <ItemsControl ItemsSource="{Binding ReceivedMessageLog}"  Style="{DynamicResource LogViewerStyle}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="#" FontWeight="DemiBold"></TextBlock>
-                                                    <TextBlock Text="{Binding Idx}" FontWeight="DemiBold"></TextBlock>
-                                                    <TextBlock Text=" "></TextBlock>
-                                                    <TextBlock Text="{Binding Timestamp}" FontWeight="DemiBold" FontStyle="Italic"></TextBlock>
-                                                    <TextBlock Text=": " FontWeight="DemiBold"></TextBlock>
-                                                    <TextBlock Text="{Binding Message}"></TextBlock>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </ScrollViewer>
-                            </StackPanel>
-                        </StackPanel>
-                        
-                        
-                    </Grid>
-                </GroupBox>
-            </Grid>
+            <ContentControl x:Name="NetworkingViewModel" />
         </Grid>
 
         <!--  Timeline controls -->
         <Grid Grid.Row="2" Grid.Column="3">
+            <ContentControl x:Name="LoggerViewModel" />
         </Grid>
 
         <!-- Status bar -->

@@ -276,7 +276,7 @@
 
     <Style TargetType="ItemsControl" x:Key="LogViewerStyle">
         <Setter Property="MinHeight" Value="100" />
-        <Setter Property="Width" Value="auto" />
+        <Setter Property="MinWidth" Value="300" />
         <Setter Property="MaxHeight" Value="450" />
         <Setter Property="Background" Value="White" />
         <Setter Property="BorderThickness" Value="1" />

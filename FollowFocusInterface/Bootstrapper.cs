@@ -19,6 +19,8 @@ namespace FollowFocusInterface
         {
             simpleContainer.Instance(simpleContainer);
             simpleContainer.Singleton<ShellViewModel>();
+            simpleContainer.Singleton<LoggerViewModel>();
+            simpleContainer.Singleton<NetworkingViewModel>();
 
             simpleContainer
                 .Singleton<IWindowManager, WindowManager>()

@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="FollowFocusInterface.Views.LoggerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FollowFocusInterface.Views"
+             xmlns:helpers="clr-namespace:FollowFocusInterface.Helpers"
+             mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="540"
+             >
+    <Grid>
+        <Border BorderBrush="Black" BorderThickness="1" Background="#fffcf9" />
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="5"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="5"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+
+            <GroupBox Grid.Column="1" Grid.Row="1" Header="Logger" BorderThickness="1" BorderBrush="DimGray">
+                <StackPanel Grid.Row="1" Grid.Column="1">
+                        <ItemsControl ItemsSource="{Binding ReceivedMessageLog}"  Style="{DynamicResource LogViewerStyle}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text=" "></TextBlock>
+                                        <TextBlock Text="#" FontWeight="DemiBold"></TextBlock>
+                                        <TextBlock Text="{Binding Idx}" FontWeight="DemiBold"></TextBlock>
+                                        <TextBlock Text=" "></TextBlock>
+                                        <TextBlock Text="{Binding Timestamp}" FontWeight="DemiBold" FontStyle="Italic"></TextBlock>
+                                        <TextBlock Text=": " FontWeight="DemiBold"></TextBlock>
+                                        <TextBlock Text="{Binding Message}"></TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                </StackPanel>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</UserControl>
