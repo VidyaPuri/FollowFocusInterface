@@ -73,9 +73,13 @@
     </Compile>
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Helpers\AutoScrollBehavior.cs" />
+    <Compile Include="Models\FocusModel.cs" />
     <Compile Include="Models\SerialReceivedModel.cs" />
     <Compile Include="Models\SerialStatusModel.cs" />
+    <Compile Include="Models\SocketServerModel.cs" />
+    <Compile Include="Models\StateObjectModel.cs" />
     <Compile Include="Networking\SerialCommunication.cs" />
+    <Compile Include="Networking\SocketServer.cs" />
     <Compile Include="ViewModels\LoggerViewModel.cs" />
     <Compile Include="ViewModels\NetworkingViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />

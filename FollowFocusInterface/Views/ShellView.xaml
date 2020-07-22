@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         WindowState="{Binding WindowState}"
         WindowStyle="None"
-        Title="ShellView" Height="1080" Width="1240">
+        Title="Follow Focus Interface" Height="1080" Width="1240">
     
     
     <WindowChrome.WindowChrome>

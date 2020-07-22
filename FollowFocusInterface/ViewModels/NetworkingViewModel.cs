@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using FollowFocusInterface.Models;
 using FollowFocusInterface.Networking;
+using RobotClient.Networking;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FollowFocusInterface.ViewModels
 {
-    public class NetworkingViewModel : Screen, IHandle<SerialStatusModel>
+    public class NetworkingViewModel : Screen, IHandle<SerialStatusModel>, IHandle<SocketServerModel>
     {
         #region Private Members
 
@@ -30,7 +31,80 @@ namespace FollowFocusInterface.ViewModels
             _eventAggregator.Subscribe(this);
 
             _serial = new SerialCommunication(eventAggregator);
+
+            // Server
+            _roboServer = new SocketServer(eventAggregator);
         }
+
+        #endregion
+
+        #region TCP Socket Server
+
+        #region Private Members
+
+        private SocketServer _roboServer;
+        public int RoboPort { get; set; } = 11000;
+        private bool _SocketServerStatus;
+        private string _SocketServerBtnTxt = "Start server";
+        private int _NoClientsConnected = 0;
+
+        #endregion
+
+        #region TCP Property Initialisation
+
+        /// <summary>
+        /// Socket Server Status
+        /// </summary>
+        public bool SocketServerStatus
+        {
+            get { return _SocketServerStatus; }
+            set => Set(ref _SocketServerStatus, value);
+        }
+
+        /// <summary>
+        /// Socket Server Button Text
+        /// </summary>
+        public string SocketServerBtnTxt
+        {
+            get { return _SocketServerBtnTxt; }
+            set => Set(ref _SocketServerBtnTxt, value);
+        }
+
+        /// <summary>
+        /// Number of connected clients
+        /// </summary>
+        public int NoClientsConnected
+        {
+            get { return _NoClientsConnected; }
+            set => Set(ref _NoClientsConnected, value);
+        }
+
+
+        #endregion
+
+        #region TCP Server Methods
+
+        /// <summary>
+        /// Create Socket Server
+        /// </summary>
+        public void StartSocketServer()
+        {
+            if (!SocketServerStatus)
+            {
+                Task.Run(() =>
+                {
+                    _roboServer.StartListening(RoboPort);
+                });
+            }
+            else
+            {
+                _roboServer.CloseServer();
+                NoClientsConnected = 0;
+            }
+
+        }
+
+        #endregion
 
         #endregion
 
@@ -131,6 +205,116 @@ namespace FollowFocusInterface.ViewModels
 
         #endregion
 
+        #region Follow Focus Targets
+
+        #region Private Members
+
+        private BindableCollection<FocusModel> _FocusList = new BindableCollection<FocusModel>();
+
+        private int _ReceivedFocusTarget;
+        private int _SelectedFocusTargetIdx = 0;
+
+        #endregion
+
+        #region Target Properties
+
+        /// <summary>
+        /// List with Focus Targets
+        /// </summary>
+        public BindableCollection<FocusModel> FocusList
+        {
+            get { return _FocusList; }
+            set => Set(ref _FocusList, value);
+        }
+
+        /// <summary>
+        /// Idx of selected focus target
+        /// </summary>
+        public int SelectedFocusTargetIdx
+        {
+            get { return _SelectedFocusTargetIdx; }
+            set => Set(ref _SelectedFocusTargetIdx, value);
+        }
+
+        /// <summary>
+        /// The target that was received from UR
+        /// </summary>
+        public int ReceivedFocusTarget
+        {
+            get { return _ReceivedFocusTarget; }
+            set
+            {
+                _ReceivedFocusTarget = value;
+                Debug.WriteLine($"I have received the order to execute servo focus position #{ReceivedFocusTarget}");
+                try
+                {
+                    _serial.SendToPort(FocusList[value].Val);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
+                NotifyOfPropertyChange(() => ReceivedFocusTarget);
+            }
+        }
+
+        #endregion
+
+        #region Target Methods
+
+        /// <summary>
+        /// Adds new focus target to the list
+        /// </summary>
+        public void AddFocusTarget()
+        {
+            var target = new FocusModel
+            {
+                Name = "GetSomeName",
+                Idx = 0,
+                Val = SliderValue
+            };
+            FocusList.Add(target);
+        }
+
+        /// <summary>
+        /// Insert new focus target to the list
+        /// </summary>
+        public void InsertFocusTarget()
+        {
+            var target = new FocusModel
+            {
+                Name = "FocusTarget",
+                Idx = 0,
+                Val = SliderValue
+            };
+            FocusList.Insert(SelectedFocusTargetIdx, target);
+        }
+
+        /// <summary>
+        /// Edits selected focus target
+        /// </summary>
+        public void EditFocusTarget()
+        {
+            if (FocusList.Count > 0)
+                FocusList[SelectedFocusTargetIdx].Val = SliderValue;
+
+            FocusList.Refresh();
+        }
+
+        /// <summary>
+        /// Removes selected focus target from the list
+        /// </summary>
+        public void RemoveFocusTarget()
+        {
+            if (FocusList.Count > 0)
+                FocusList.RemoveAt(SelectedFocusTargetIdx);
+            SelectedFocusTargetIdx = 0;
+        }
+
+        #endregion
+
+        #endregion
+
         #region Handlers
 
         /// <summary>
@@ -146,6 +330,24 @@ namespace FollowFocusInterface.ViewModels
                 USBConnectBtnText = "Close Port";
             else if (!USBSerialStatus)
                 USBConnectBtnText = "Open Port";
+        }
+
+
+        /// <summary>
+        /// Handling the Socket server status and data
+        /// </summary>
+        /// <param name="message"></param>
+        public void Handle(SocketServerModel message)
+        {
+            SocketServerStatus = message.IsServerListening;
+            ReceivedFocusTarget = message.FocusTargetIndex;
+            NoClientsConnected = message.NoClientsConnected;
+
+            // USB Serial Status
+            if (SocketServerStatus)
+                SocketServerBtnTxt = "Stop Server";
+            else if (!SocketServerStatus)
+                SocketServerBtnTxt = "Start Server";
         }
 
         #endregion

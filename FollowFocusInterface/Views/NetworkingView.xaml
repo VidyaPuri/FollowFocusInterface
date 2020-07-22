@@ -13,10 +13,11 @@
     </UserControl.Resources>
 
     <Grid>
-        <!-- USB Serial Port -->
         <Border BorderBrush="Black" BorderThickness="1" Background="#fffcf9" />
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="5"/>
@@ -28,11 +29,26 @@
                 <ColumnDefinition Width="5"/>
             </Grid.ColumnDefinitions>
 
+            <!-- TCP Socket Server -->
+            <GroupBox Header="TCP Socket Server" Grid.Row="1" Grid.Column="1" BorderThickness="1" BorderBrush="DimGray">
+                <StackPanel Orientation="Horizontal" Margin="10,5,10,0">
+                    <Button x:Name="StartSocketServer" Content="{Binding SocketServerBtnTxt, FallbackValue='Start server'}" 
+                            Width="100" Style="{DynamicResource ButtonStyle1}"/>
+                    <RadioButton Content="Status" HorizontalAlignment="Center" IsChecked="{Binding SocketServerStatus}" IsEnabled="False"
+                                     FlowDirection="RightToLeft" Margin="15 0 0 0" 
+                                     Style="{DynamicResource RadioButtonStyle1}" 
+                                     VerticalAlignment="Center">
+                    </RadioButton>
+                    <Label Content="Clients Connected: "/>
+                    <TextBlock Text="{Binding NoClientsConnected}" VerticalAlignment="Center"/>
+                </StackPanel>
+            </GroupBox>
+
             <!-- USB Serial Communication -->
-            <ToggleButton Grid.Column="1" Grid.Row="1" Height="20" Width="155" VerticalAlignment="top" HorizontalAlignment="Left" IsChecked="True"
+            <ToggleButton Grid.Column="1" Grid.Row="3" Height="20" Width="155" VerticalAlignment="top" HorizontalAlignment="Left" IsChecked="True"
                           x:Name="ToggleVisibility_02" Panel.ZIndex="1" Style="{DynamicResource VisibilityToggleButton}"/>
-            <GroupBox Grid.Column="1" Grid.Row="1" Header="USB Serial Communication" BorderThickness="1" BorderBrush="DimGray">
-                <Grid Grid.Row="1" Visibility="{Binding ElementName=ToggleVisibility_02, Path=IsChecked, Converter={StaticResource BoolToVisibility}}">
+            <GroupBox Grid.Column="1" Grid.Row="3" Header="USB Serial Communication" BorderThickness="1" BorderBrush="DimGray">
+                <Grid Grid.Row="3" Visibility="{Binding ElementName=ToggleVisibility_02, Path=IsChecked, Converter={StaticResource BoolToVisibility}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
@@ -70,7 +86,7 @@
                                 <Button Content="Remove" x:Name="RemoveFocusTarget"  Style="{DynamicResource ButtonStyle1}" Width="100"/>
                             </StackPanel>
                             <ListView  ItemsSource="{Binding FocusList}" SelectionMode="Single"
-                                       MinHeight="50" MaxHeight="100" MinWidth="365"
+                                       MinHeight="50" MaxHeight="250" MinWidth="365"
                                        SelectedIndex="{Binding SelectedFocusTargetIdx}"
                                        SelectedItem="{Binding SelectedFocusTarget}" BorderBrush="#141414" BorderThickness="1">
                                 <ListView.ItemTemplate>
